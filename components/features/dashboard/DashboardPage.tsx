@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import { ActiveProjectsCard } from "./ActiveProjectsCard";
 import { RevenueChart } from "../charts/RevenueChart";
 
+import { useAuth } from "@/components/features/auth/AuthProvider";
+
 interface DashboardPageProps {
     onNewProject: () => void;
 }
@@ -23,6 +25,9 @@ interface DashboardPageProps {
  */
 export function DashboardPage({ onNewProject }: DashboardPageProps) {
     const router = useRouter();
+    const { user } = useAuth();
+    const userName = user?.user_metadata?.full_name?.split(' ')[0] || "there";
+
     return (
         <div className="space-y-8 lg:space-y-12">
             <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-2 border-b border-gray-100">
@@ -30,7 +35,7 @@ export function DashboardPage({ onNewProject }: DashboardPageProps) {
                     <div className="flex items-center gap-2 text-brand-700 font-bold text-xs uppercase tracking-widest">
                         <LayoutGrid className="size-3.5" /> Workspace Overview
                     </div>
-                    <h1 className="text-display-xs sm:text-display-sm font-bold text-gray-900 tracking-tight">Welcome back, Olivia</h1>
+                    <h1 className="text-display-xs sm:text-display-sm font-bold text-gray-900 tracking-tight">Welcome back, {userName}</h1>
                     <p className="text-gray-500 text-base sm:text-lg">Here's what's happening in your workspace today.</p>
                 </div>
                 <div className="flex items-center gap-3">

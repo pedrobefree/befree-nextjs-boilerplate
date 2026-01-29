@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { UntitledUiLogo } from "@/components/ui/logos";
@@ -8,11 +8,13 @@ import { SocialIcon } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { createOrganization } from "@/app/actions/organizations";
+import { useToast } from "@/components/ui/Toast";
 
 export const SignUpPage = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { addToast } = useToast();
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
@@ -56,10 +58,22 @@ export const SignUpPage = () => {
 
                 await createOrganization(orgName, orgSlug);
 
+                addToast({
+                    title: "Account created!",
+                    description: "Your account and workspace are ready.",
+                    type: "success",
+                });
+
                 router.push("/dashboard");
             }
         } catch (err: any) {
-            setError(err.message || "Something went wrong. Please try again.");
+            const errorMessage = err.message || "Something went wrong. Please try again.";
+            setError(errorMessage);
+            addToast({
+                title: "Sign up failed",
+                description: errorMessage,
+                type: "error",
+            });
         } finally {
             setIsLoading(false);
         }
@@ -99,7 +113,7 @@ export const SignUpPage = () => {
                                 </div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
                                 <Input
                                     label="Full name"
                                     name="fullName"

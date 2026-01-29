@@ -56,16 +56,16 @@ interface UserMenuDialogProps extends AriaDialogProps {
 
 const UserMenuDialog = ({
     className,
-    accounts = defaultAccounts,
-    selectedAccountId,
-    onAccountSwitch,
-    _onClose,
     ...dialogProps
 }: UserMenuDialogProps) => {
     const router = useRouter();
-    const { signOut } = useAuth();
+    const { signOut, user } = useAuth();
     const focusManager = useFocusManager();
     const dialogRef = useRef<HTMLDivElement>(null);
+
+    const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+    const userEmail = user?.email || "user@example.com";
+    const userAvatar = user?.user_metadata?.avatar_url || "";
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -130,34 +130,24 @@ const UserMenuDialog = ({
                             }}
                         />
                     </div>
-                    {accounts && accounts.length > 0 && (
-                        <div className="flex flex-col gap-0.5 border-t border-secondary py-1.5">
-                            <div className="px-3 pt-1.5 pb-1 text-xs font-semibold text-tertiary">Switch account</div>
+                    <div className="flex flex-col gap-0.5 border-t border-secondary py-1.5">
+                        <div className="px-3 pt-1.5 pb-1 text-xs font-semibold text-tertiary">Current Workspace</div>
 
-                            <div className="flex flex-col gap-0.5 px-1.5">
-                                {accounts.map((account) => (
-                                    <button
-                                        key={account.id}
-                                        onClick={() => {
-                                            onAccountSwitch?.(account.id);
-                                            close();
-                                        }}
-                                        className={cx(
-                                            "relative w-full cursor-pointer rounded-md px-2 py-1.5 text-left outline-focus-ring hover:bg-primary_hover focus:z-10 focus-visible:outline-2 focus-visible:outline-offset-2",
-                                            account.id === selectedAccountId && "bg-primary_hover",
-                                        )}
-                                    >
-                                        <AvatarLabelGroup status={account.status as any} size="md" src={account.avatar} title={account.name} subtitle={account.email} />
+                        <div className="flex flex-col gap-0.5 px-1.5">
+                            <div
+                                className={cx(
+                                    "relative w-full rounded-md px-2 py-1.5 text-left bg-primary_hover",
+                                )}
+                            >
+                                <AvatarLabelGroup status="online" size="md" src={userAvatar} title={userName} subtitle={userEmail} />
 
-                                        <RadioButtonBase isSelected={account.id === selectedAccountId} className="absolute top-2 right-2" />
-                                    </button>
-                                ))}
+                                <RadioButtonBase isSelected={true} className="absolute top-2 right-2" />
                             </div>
                         </div>
-                    )}
-                    <div className="flex flex-col gap-2 px-2 pt-0.5 pb-2">
+                    </div>
+                    <div className="flex flex-col gap-2 px-2 pt-0.5 pb-2 border-t border-secondary mt-1">
                         <Button variant="secondary" size="sm" className="w-full justify-start gap-2" onPress={close}>
-                            <Plus className="size-4" /> Add account
+                            <Plus className="size-4" /> Add workspace
                         </Button>
                     </div>
 
@@ -218,24 +208,23 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({
-    name,
-    email,
-    avatarUrl,
     placement,
-    accounts = defaultAccounts,
-    selectedAccountId = "olivia",
 }: UserMenuProps) => {
     const triggerRef = useRef<HTMLDivElement>(null);
     const isDesktop = useBreakpoint();
+    const { user } = useAuth();
 
-    // Use passed details or find from accounts
-    const selectedAccount = accounts.find((account) => account.id === selectedAccountId);
-    const displayAccount = selectedAccount || {
-        name: name || "User",
-        email: email || "user@example.com",
-        avatar: avatarUrl || "",
+    // Prefer User Metadata name, then email, then display fallback
+    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || "User";
+    const userEmail = user?.email || "user@example.com";
+    const userAvatar = user?.user_metadata?.avatar_url || "";
+
+    const displayAccount = {
+        name: userName,
+        email: userEmail,
+        avatar: userAvatar,
         status: "online",
-        id: "custom"
+        id: user?.id || "custom"
     };
 
     return (
@@ -267,10 +256,7 @@ export const UserMenu = ({
                             )
                         }
                     >
-                        <UserMenuDialog
-                            selectedAccountId={selectedAccountId}
-                            accounts={accounts}
-                        />
+                        <UserMenuDialog />
                     </AriaPopover>
                 </AriaDialogTrigger>
             </div>

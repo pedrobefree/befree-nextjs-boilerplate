@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { UntitledUiLogo } from "@/components/ui/logos";
@@ -8,11 +8,13 @@ import { SocialIcon } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { useToast } from "@/components/ui/Toast";
 
 export const LoginPage = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { addToast } = useToast();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -27,7 +29,8 @@ export const LoginPage = () => {
         }));
     };
 
-    const handleSubmit = async (_e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
 
@@ -41,10 +44,22 @@ export const LoginPage = () => {
 
             if (signInError) throw signInError;
 
+            addToast({
+                title: "Welcome back!",
+                description: "You have successfully logged in.",
+                type: "success",
+            });
+
             router.push("/dashboard");
             router.refresh();
         } catch (err: any) {
-            setError(err.message || "Invalid email or password.");
+            const errorMessage = err.message || "Invalid email or password.";
+            setError(errorMessage);
+            addToast({
+                title: "Login failed",
+                description: errorMessage,
+                type: "error",
+            });
         } finally {
             setIsLoading(false);
         }
@@ -84,7 +99,7 @@ export const LoginPage = () => {
                                 </div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
                                 <Input
                                     label="Email address"
                                     name="email"

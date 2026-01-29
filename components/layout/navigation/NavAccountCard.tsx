@@ -52,13 +52,16 @@ const placeholderAccounts: NavAccountType[] = [
 
 export const NavAccountMenu = ({
     className,
-    selectedAccountId = "olivia",
     ...dialogProps
-}: AriaDialogProps & { className?: string; accounts?: NavAccountType[]; selectedAccountId?: string }) => {
+}: AriaDialogProps & { className?: string; selectedAccountId?: string }) => {
     const router = useRouter();
-    const { signOut } = useAuth();
+    const { signOut, user } = useAuth();
     const focusManager = useFocusManager();
     const dialogRef = useRef<HTMLDivElement>(null);
+
+    const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+    const userEmail = user?.email || "user@example.com";
+    const userAvatar = user?.user_metadata?.avatar_url || placeholderAccounts[0].avatar;
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -124,28 +127,23 @@ export const NavAccountMenu = ({
                         />
                     </div>
                     <div className="flex flex-col gap-0.5 border-t border-secondary py-1.5">
-                        <div className="px-3 pt-1.5 pb-1 text-xs font-semibold text-tertiary">Switch account</div>
+                        <div className="px-3 pt-1.5 pb-1 text-xs font-semibold text-tertiary">Current Workspace</div>
 
                         <div className="flex flex-col gap-0.5 px-1.5">
-                            {placeholderAccounts.map((account) => (
-                                <button
-                                    key={account.id}
-                                    className={cx(
-                                        "relative w-full cursor-pointer rounded-md px-2 py-1.5 text-left outline-focus-ring hover:bg-primary_hover focus:z-10 focus-visible:outline-2 focus-visible:outline-offset-2",
-                                        account.id === selectedAccountId && "bg-primary_hover",
-                                    )}
-                                    onClick={close}
-                                >
-                                    <AvatarLabelGroup status="online" size="md" src={account.avatar} title={account.name} subtitle={account.email} />
+                            <div
+                                className={cx(
+                                    "relative w-full rounded-md px-2 py-1.5 text-left bg-primary_hover",
+                                )}
+                            >
+                                <AvatarLabelGroup status="online" size="md" src={userAvatar} title={userName} subtitle={userEmail} />
 
-                                    <RadioButtonBase isSelected={account.id === selectedAccountId} className="absolute top-2 right-2" />
-                                </button>
-                            ))}
+                                <RadioButtonBase isSelected={true} className="absolute top-2 right-2" />
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 px-2 pt-0.5 pb-2">
                         <Button variant="secondary" size="sm" className="w-full justify-start gap-2">
-                            <Plus className="size-4" /> Add account
+                            <Plus className="size-4" /> Add workspace
                         </Button>
                     </div>
 
@@ -199,22 +197,25 @@ const NavAccountCardMenuItem = ({
 
 export const NavAccountCard = ({
     popoverPlacement,
-    selectedAccountId = "olivia",
-    items = placeholderAccounts,
 }: {
     popoverPlacement?: Placement;
-    selectedAccountId?: string;
-    items?: NavAccountType[];
 }) => {
     const triggerRef = useRef<HTMLDivElement>(null);
     const isDesktop = useBreakpoint();
+    const { user } = useAuth();
 
-    const selectedAccount = placeholderAccounts.find((account) => account.id === selectedAccountId);
+    // Prefer User Metadata name, then email, then display fallback
+    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || "User";
+    const userEmail = user?.email || "user@example.com";
+    const userAvatar = user?.user_metadata?.avatar_url || placeholderAccounts[0].avatar;
 
-    if (!selectedAccount) {
-        console.warn(`Account with ID ${selectedAccountId} not found in <NavAccountCard />`);
-        return null;
-    }
+    const selectedAccount: NavAccountType = {
+        id: user?.id || "unknown",
+        name: userName,
+        email: userEmail,
+        avatar: userAvatar,
+        status: "online",
+    };
 
     return (
         <div ref={triggerRef} className="relative flex items-center gap-3 rounded-xl p-3 ring-1 ring-secondary ring-inset">
@@ -246,8 +247,7 @@ export const NavAccountCard = ({
                         }
                     >
                         <NavAccountMenu
-                            selectedAccountId={selectedAccountId}
-                            accounts={items}
+                            selectedAccountId={selectedAccount.id}
                         />
                     </AriaPopover>
                 </AriaDialogTrigger>
