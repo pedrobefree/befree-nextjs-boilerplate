@@ -1,4 +1,4 @@
-# Antigravity Boilerplate (Nexjs + Supabase)
+# Befree Boilerplate (Nexjs + Supabase)
 
 A premium, AI-friendly SaaS boilerplate using **Next.js 15 (App Router)**, **Supabase**, **Tailwind CSS v4**, and **Untitled UI** design tokens. This boilerplate is optimized for industrial-grade SaaS development and AI-assisted coding.
 
@@ -62,4 +62,4 @@ export async function myAction() {
 
 ## 📝 License
 
-Internal Use - Antigravity AI
+Internal Use - Befree Academy

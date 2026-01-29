@@ -3,7 +3,7 @@
  */
 
 export const APP_CONFIG = {
-    name: "Antigravity Boilerplate",
+    name: "Befree Boilerplate",
     description: "A premium Next.js-inspired boilerplate using Untitled UI and Tailwind CSS.",
     version: "1.0.0",
 };
