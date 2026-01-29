@@ -1,0 +1,6 @@
+.agent
+.DS_Store
+boilerplate/node_modules
+boilerplate/.next
+boilerplate/dist
+*.local
