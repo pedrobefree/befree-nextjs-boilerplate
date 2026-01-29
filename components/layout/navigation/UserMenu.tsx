@@ -29,22 +29,6 @@ export type UserAccount = {
 };
 
 // Default placeholders if none provided (for testing/demo)
-const defaultAccounts: UserAccount[] = [
-    {
-        id: "olivia",
-        name: "Olivia Rhye",
-        email: "olivia@untitledui.com",
-        avatar: "https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80",
-        status: "online",
-    },
-    {
-        id: "sienna",
-        name: "Sienna Hewitt",
-        email: "sienna@untitledui.com",
-        avatar: "https://www.untitledui.com/images/avatars/transparent/sienna-hewitt?bg=%23E0E0E0",
-        status: "online",
-    },
-];
 
 interface UserMenuDialogProps extends AriaDialogProps {
     className?: string;
