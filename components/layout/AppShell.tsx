@@ -11,6 +11,7 @@ import { CommandPalette } from "./CommandPalette"
 import { CreateProjectWizard } from "../features/projects/CreateProjectWizard"
 import { Modal, ModalOverlay, Dialog } from "@/components/ui/Modal"
 import { BrandLogo } from "@/components/ui/BrandLogo"
+import { RouterProvider } from "react-aria-components";
 
 const navigation: (NavItemType & { view: string })[] = [
     { label: "Dashboard", href: "/dashboard", view: "dashboard", icon: LayoutGrid },
@@ -49,89 +50,91 @@ export function AppShell({ children, currentView, onViewChange }: AppShellProps)
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50">
-            {/* Desktop Sidebar */}
-            <div className="hidden lg:flex flex-col w-72 border-r border-gray-200 bg-white h-screen sticky top-0">
-                <div className="p-6">
-                    <BrandLogo size="md" />
-                </div>
-
-                <div className="flex-1 overflow-y-auto">
-                    <NavList items={navigation} activeUrl={activeUrl} onItemClick={handleNavClick} />
-                </div>
-
-                <div className="p-4 border-t border-gray-200">
-                    <NavAccountCard />
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
-                <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-4 lg:px-12 sticky top-0 z-10 gap-4">
-                    <div className="flex items-center gap-4 lg:hidden min-w-0 flex-1">
-                        <MobileNavigationHeader>
-                            {(close) => (
-                                <div className="p-4">
-                                    <NavList
-                                        items={navigation}
-                                        activeUrl={activeUrl}
-                                        onItemClick={(item) => {
-                                            handleNavClick(item);
-                                            close();
-                                        }}
-                                    />
-                                </div>
-                            )}
-                        </MobileNavigationHeader>
-                        <BrandLogo size="sm" />
+            <RouterProvider navigate={router.push}>
+                {/* Desktop Sidebar */}
+                <div className="hidden lg:flex flex-col w-72 border-r border-gray-200 bg-white h-screen sticky top-0">
+                    <div className="p-6">
+                        <BrandLogo size="md" />
                     </div>
 
-                    <div className="relative group max-w-md w-full hidden sm:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" />
-                        <input
-                            type="text"
-                            placeholder="Search or type a command (⌘K)"
-                            readOnly
-                            onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 pl-10 pr-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 cursor-pointer transition-all hover:bg-white hover:border-brand-200"
-                        />
+                    <div className="flex-1 overflow-y-auto">
+                        <NavList items={navigation} activeUrl={activeUrl} onItemClick={handleNavClick} />
                     </div>
 
-                    <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-                        <NotificationPopover />
-                        <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-100">
-                            <UserMenu />
+                    <div className="p-4 border-t border-gray-200">
+                        <NavAccountCard />
+                    </div>
+                </div>
+
+                {/* Main Content */}
+                <main className="flex-1 overflow-y-auto">
+                    <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-4 lg:px-12 sticky top-0 z-10 gap-4">
+                        <div className="flex items-center gap-4 lg:hidden min-w-0 flex-1">
+                            <MobileNavigationHeader>
+                                {(close) => (
+                                    <div className="p-4">
+                                        <NavList
+                                            items={navigation}
+                                            activeUrl={activeUrl}
+                                            onItemClick={(item) => {
+                                                handleNavClick(item);
+                                                close();
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </MobileNavigationHeader>
+                            <BrandLogo size="sm" />
+                        </div>
+
+                        <div className="relative group max-w-md w-full hidden sm:block">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" />
+                            <input
+                                type="text"
+                                placeholder="Search or type a command (⌘K)"
+                                readOnly
+                                onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+                                className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 pl-10 pr-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 cursor-pointer transition-all hover:bg-white hover:border-brand-200"
+                            />
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                            <NotificationPopover />
+                            <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-100">
+                                <UserMenu />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="p-4 lg:p-12 max-w-7xl mx-auto w-full">
-                    {children}
-                </div>
-            </main>
-            <CommandPalette onNavigate={(view) => {
-                if (onViewChange) {
-                    onViewChange(view);
-                } else {
-                    const item = navigation.find(n => n.view === view);
-                    if (item?.href) {
-                        router.push(item.href);
+                    <div className="p-4 lg:p-12 max-w-7xl mx-auto w-full">
+                        {children}
+                    </div>
+                </main>
+                <CommandPalette onNavigate={(view) => {
+                    if (onViewChange) {
+                        onViewChange(view);
+                    } else {
+                        const item = navigation.find(n => n.view === view);
+                        if (item?.href) {
+                            router.push(item.href);
+                        }
                     }
-                }
-            }} />
+                }} />
 
-            {/* Global Project Wizard */}
-            <ModalOverlay isOpen={isWizardOpen} onOpenChange={setIsWizardOpen} isDismissable>
-                <Modal className="sm:max-w-4xl max-h-[90vh] bg-transparent shadow-none border-none p-0 overflow-visible">
-                    <Dialog className="outline-none h-full">
-                        <CreateProjectWizard
-                            onClose={() => setIsWizardOpen(false)}
-                            onComplete={(data) => {
-                                console.log("New project data:", data);
-                                setIsWizardOpen(false);
-                            }}
-                        />
-                    </Dialog>
-                </Modal>
-            </ModalOverlay>
+                {/* Global Project Wizard */}
+                <ModalOverlay isOpen={isWizardOpen} onOpenChange={setIsWizardOpen} isDismissable>
+                    <Modal className="sm:max-w-4xl max-h-[90vh] bg-transparent shadow-none border-none p-0 overflow-visible">
+                        <Dialog className="outline-none h-full">
+                            <CreateProjectWizard
+                                onClose={() => setIsWizardOpen(false)}
+                                onComplete={(data) => {
+                                    console.log("New project data:", data);
+                                    setIsWizardOpen(false);
+                                }}
+                            />
+                        </Dialog>
+                    </Modal>
+                </ModalOverlay>
+            </RouterProvider>
         </div>
     )
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { UntitledUiLogo } from "@/components/ui/logos";
 import { SocialIcon } from "@/components/ui/social-icons";
@@ -128,12 +129,6 @@ export const LoginPage = () => {
                                         onChange={(isSelected) => setFormData(prev => ({ ...prev, remember: isSelected }))}
                                         label="Remember for 30 days"
                                     />
-
-                                    <div className="text-sm">
-                                        <a href="#" className="font-medium text-brand-600 hover:text-brand-500">
-                                            Forgot password?
-                                        </a>
-                                    </div>
                                 </div>
 
                                 <div>
@@ -146,6 +141,12 @@ export const LoginPage = () => {
                                     </Button>
                                 </div>
                             </form>
+
+                            <div className="mt-4 text-center text-sm">
+                                <Link href="/forgot-password" className="font-medium text-brand-600 hover:text-brand-500">
+                                    Forgot password?
+                                </Link>
+                            </div>
                         </div>
 
                         <div className="mt-6">
