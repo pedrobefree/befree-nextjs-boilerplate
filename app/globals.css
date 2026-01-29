@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./theme.css";
+@import "./brand.css";
 @import "./typography.css";
 
 @plugin "@tailwindcss/typography";
@@ -14,11 +15,13 @@
     --animate-caret-blink: caret-blink 1.2s ease-out infinite;
 
     @keyframes caret-blink {
+
         0%,
         70%,
         100% {
             opacity: 1;
         }
+
         20%,
         50% {
             opacity: 0;
@@ -27,6 +30,7 @@
 }
 
 @utility scrollbar-hide {
+
     /* For Webkit-based browsers (Chrome, Safari and Opera) */
     &::-webkit-scrollbar {
         display: none;
@@ -34,8 +38,10 @@
     }
 
     /* For IE, Edge and Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 @utility transition-inherit-all {
@@ -67,6 +73,7 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 /* Firefox */
 input[type="number"] {
     -moz-appearance: textfield;

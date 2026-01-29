@@ -8,6 +8,18 @@ export const APP_CONFIG = {
     version: "1.0.0",
 };
 
+export const BRAND_CONFIG = {
+    name: "Befree",
+    logo: {
+        light: "/logo-light.svg",
+        dark: "/logo-dark.svg",
+        icon: "/icon.svg",
+    },
+    theme: {
+        primaryColor: "#4146F6", // Brand primary color
+    },
+};
+
 export const NAVIGATION = {
     main: [
         { name: "Dashboard", href: "dashboard" },

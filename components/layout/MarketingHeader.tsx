@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { UntitledUiLogo } from "@/components/ui/logos";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
@@ -16,9 +16,7 @@ export const MarketingHeader = () => {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 text-brand-600">
-                        <UntitledUiLogo className="h-8 w-auto" />
-                    </Link>
+                    <BrandLogo size="md" />
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex gap-8">

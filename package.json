@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "theme": "node scripts/update-theme.mjs",
     "mcp": "mcp-server-supabase"
   },
   "dependencies": {

@@ -10,6 +10,7 @@ import { CommandPalette } from "./CommandPalette"
 
 import { CreateProjectWizard } from "../features/projects/CreateProjectWizard"
 import { Modal, ModalOverlay, Dialog } from "@/components/ui/Modal"
+import { BrandLogo } from "@/components/ui/BrandLogo"
 
 const navigation: (NavItemType & { view: string })[] = [
     { label: "Dashboard", href: "/dashboard", view: "dashboard", icon: LayoutGrid },
@@ -51,12 +52,7 @@ export function AppShell({ children, currentView, onViewChange }: AppShellProps)
             {/* Desktop Sidebar */}
             <div className="hidden lg:flex flex-col w-72 border-r border-gray-200 bg-white h-screen sticky top-0">
                 <div className="p-6">
-                    <div className="flex items-center gap-2 font-bold text-xl text-gray-900 cursor-pointer" onClick={() => onViewChange?.('dashboard')}>
-                        <div className="h-8 w-8 bg-brand-600 rounded-lg flex items-center justify-center text-white">
-                            U
-                        </div>
-                        Untitled UI
-                    </div>
+                    <BrandLogo size="md" />
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
@@ -86,9 +82,7 @@ export function AppShell({ children, currentView, onViewChange }: AppShellProps)
                                 </div>
                             )}
                         </MobileNavigationHeader>
-                        <div className="font-bold text-lg text-gray-900 truncate" onClick={() => onViewChange?.('dashboard')}>
-                            Untitled UI
-                        </div>
+                        <BrandLogo size="sm" />
                     </div>
 
                     <div className="relative group max-w-md w-full hidden sm:block">
