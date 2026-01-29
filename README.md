@@ -1,64 +1,107 @@
-# Befree Boilerplate (Nexjs + Supabase)
+# Befree Boilerplate (Next.js + Supabase)
 
 A premium, AI-friendly SaaS boilerplate using **Next.js 15 (App Router)**, **Supabase**, **Tailwind CSS v4**, and **Untitled UI** design tokens. This boilerplate is optimized for industrial-grade SaaS development and AI-assisted coding.
 
-## 🚀 Quick Start
+---
 
+## 🚀 Getting Started
+
+Follow these steps to set up the project locally.
+
+### 1. Clone the Repository
 ```bash
-# 1. Install dependencies
-npm install
-
-# 2. Configure environment
-cp .env.local.example .env.local
-# Add your Supabase keys and generate an ENCRYPTION_KEY
-
-# 3. Start development server
-npm run dev
-
-# 4. Build for production
-npm run build
+git clone https://github.com/pedrobefree/befree-nextjs-boilerplate.git
+cd befree-nextjs-boilerplate
 ```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Set Up Supabase Locally (Docker)
+This boilerplate is designed to work with Supabase CLI for local development.
+
+1. **Install Supabase CLI** (if you haven't):
+   ```bash
+   brew install supabase/tap/supabase # macOS
+   ```
+2. **Start Supabase Services**:
+   Ensure Docker Desktop is running, then execute:
+   ```bash
+   supabase start
+   ```
+3. **Apply Migrations**:
+   The database schema will automatically apply, but you can force it with:
+   ```bash
+   supabase db reset
+   ```
+4. **Get your local keys**:
+   After `supabase start` finishes, it will print your `API URL`, `anon key`, and `service_role key`.
+
+### 4. Configure Environment Variables
+1. **Create .env.local**:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+2. **Update keys**:
+   Open `.env.local` and paste the keys provided by the Supabase CLI in the previous step.
+3. **Encryption Key**:
+   Generate a random 32-character string for `ENCRYPTION_KEY` to secure sensitive data.
+
+### 5. Initialize Branding & Theme
+This boilerplate features an automated branding system. To generate the CSS palette based on your settings in `lib/constants.ts`:
+```bash
+npm run theme
+```
+
+### 6. Start Development Server
+```bash
+npm run dev
+```
+Visit `http://localhost:3000` to see your app in action!
+
+---
+
+## 🎨 Customizing Branding
+
+To change the app name, logo, or primary color:
+1.  Open **`lib/constants.ts`**.
+2.  Update `BRAND_CONFIG` with your values.
+3.  Run **`npm run theme`** to sync the Tailwind colors.
+
+---
 
 ## 🏗️ Project Architecture
 
-The project is structured to enforce security and multi-tenant isolation:
+Internal structure optimized for security and scalability:
 
 - **`/app`**: Next.js App Router (Pages, Layouts, API Routes).
-- **`/components/ui/`**: Generic primitive components (Untitled UI).
-- **`/components/features/`**: Domain-specific components (Auth, Dashboard, Profile).
-- **`/lib/supabase/`**: Specialized clients for different context (Server, Client, Middleware).
-- **`/lib/encryption.ts`**: AES-256-GCM service for protecting sensitive data at rest.
+- **`/components/ui/`**: Generic primitive components powered by Untitled UI.
+- **`/components/features/`**: Domain-specific components (Auth, Dashboard, Projects).
+- **`/lib/supabase/`**: Specialized clients (Server, Client, Middleware).
+- **`/lib/encryption.ts`**: AES-256-GCM service for data protection.
 - **`/supabase/migrations/`**: Version-controlled database schema.
+
+---
 
 ## 🔒 Security Best Practices
 
 ### Rule 0: Security Isolation (CRITICAL)
 - **NEVER** use `SUPABASE_SERVICE_ROLE_KEY` in client-side code.
-- **ALL** mutations must go through `/app/api/*` routes or Server Actions that validate user sessions.
-- **RLS** is mandatory on every table to enforce multi-tenant isolation.
-- **Sensitive Data** (API keys, etc.) must be encrypted before storage using the provided `EncryptionService`.
+- **ALL** mutations must go through Server Actions or API routes that validate sessions.
+- **RLS** (Row Level Security) is mandatory on every table.
+- **Sensitive Data** must be encrypted before storage using the `EncryptionService`.
+
+---
 
 ## 🤖 AI-Friendly Features
 
-- **Standardized Conventions**: PascalCase for components, camelCase for utilities, RESTful API routes.
-- **Named Exports**: All functions and components use named exports for better AI discoverability.
-- **JSDoc Documentation**: High JSDoc coverage for props and logic to provide clear context for LLMs.
-- **Pattern Fragments**: Established patterns for forms, error handling, and data fetching that are easy to clone.
+- **Named Exports**: Better discoverability for LLMs.
+- **JSDoc Documentation**: High coverage for props and logic.
+- **Pattern Fragments**: Easy-to-clone established patterns for forms and data fetching.
 
-## 🛠️ Key Utilities
-
-### Database Operations
-Use the `withErrorHandling` wrapper in Server Actions to ensure consistent error reporting.
-
-```typescript
-import { withErrorHandling } from "@/lib/supabase/errors";
-
-export async function myAction() {
-  return withErrorHandling(async () => {
-    // DB logic here
-  }, { action: "myAction" });
-}
-```
+---
 
 ## 📝 License
 
