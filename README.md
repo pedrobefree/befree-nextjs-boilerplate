@@ -22,10 +22,11 @@ npm install
 ### 3. Set Up Supabase Locally (Docker)
 This boilerplate is designed to work with Supabase CLI for local development.
 
-1. **Install Supabase CLI** (if you haven't):
-   ```bash
-   brew install supabase/tap/supabase # macOS
-   ```
+1. **Install Supabase CLI**:
+   - **macOS**: `brew install supabase/tap/supabase`
+   - **Windows**: `scoop bucket add supabase https://github.com/supabase/scoop-bucket.git` then `scoop install supabase`
+   - **Linux**: `brew install supabase/tap/supabase` or use the [direct binary](https://github.com/supabase/cli/releases)
+   - **Alternative (All OS)**: `npm install supabase --save-dev`
 2. **Start Supabase Services**:
    Ensure Docker Desktop is running, then execute:
    ```bash
