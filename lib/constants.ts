@@ -15,6 +15,7 @@ export const BRAND_CONFIG = {
         dark: "/logo-dark.svg",
         icon: "/icon.svg",
     },
+    name_logo: true, // Show brand name alongside logo
     theme: {
         primaryColor: "#4146F6", // Brand primary color
     },

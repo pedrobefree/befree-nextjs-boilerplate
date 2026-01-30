@@ -68,10 +68,23 @@ Visit `http://localhost:3000` to see your app in action!
 
 To change the app name, logo, or primary color:
 1.  Open **`lib/constants.ts`**.
-2.  Update `BRAND_CONFIG` with your values.
-3.  Run **`npm run theme`** to sync the Tailwind colors.
+2.  Update `BRAND_CONFIG` with your values:
+    - `name`: Your brand name (e.g., "Befree Academy").
+    - `name_logo`: Set to `true` to show the name next to the logo, `false` for logo only.
+    - `logo`: paths to your logo files (light/dark/icon).
+3.  **Logo Files**: Place your SVG logo files in the **`public/`** folder:
+    - `/public/logo-light.svg`
+    - `/public/logo-dark.svg`
+    - `/public/icon.svg`
+4.  Run **`npm run theme`** to sync the Tailwind colors.
 
 ---
+
+## 🏢 Organization Info
+
+**Default Organization**: Befree Academy
+**Slug**: befree-academy
+**Status**: Auto-provisioned for all users.
 
 ## 🏗️ Project Architecture
 
